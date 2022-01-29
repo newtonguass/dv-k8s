@@ -13,17 +13,7 @@ provider "azurerm" {
   features {}
 }
 
-variable "nodecount" {
-  default = 2
-}
 
-data "external" "getIP" {
-  program = ["bash", "getIP.sh"]
-}
-
-variable "prefix" {
-  default = "dv-k8s"
-}
 
 
 resource "azurerm_resource_group" "main" {
@@ -120,9 +110,9 @@ resource "azurerm_virtual_machine" "main" {
     managed_disk_type = "Standard_LRS"
   }
   os_profile {
-    computer_name  = "k8snode"
-    admin_username = "k8s"
-    admin_password = "K8Spa$$wd"
+    computer_name  = "${var.prefix}-disk-${count.index}"
+    admin_username = var.username
+    admin_password = var.password
   }
   os_profile_linux_config {
     disable_password_authentication = false
@@ -133,5 +123,18 @@ resource "azurerm_virtual_machine" "main" {
 }
 
 output "public_ip_address" {
-  value = "${azurerm_public_ip.main.*.ip_address}"
+  description = "the public ip of nodes"
+  value       = "${azurerm_public_ip.main.*.ip_address}"
+}
+
+output "node_username" {
+  description = "the node username you input"
+  value       = var.username
+  sensitive = true
+}
+
+output "node_password" {
+  description = "the node password you input"
+  value       = var.password
+  sensitive = true
 }

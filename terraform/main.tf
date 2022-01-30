@@ -54,7 +54,7 @@ resource "azurerm_subnet" "intranet" {
 
 resource "azurerm_public_ip" "main" {
   name                = "${var.prefix}-publicIP-${count.index}"
-  count               = var.nodecount
+  count               = var.worker_count+1
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   allocation_method   = "Static"
@@ -63,7 +63,7 @@ resource "azurerm_public_ip" "main" {
 
 resource "azurerm_network_interface" "main" {
   name                = "${var.prefix}-nic-${count.index}"
-  count               = var.nodecount
+  count               = var.worker_count+1
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
@@ -78,7 +78,7 @@ resource "azurerm_network_interface" "main" {
 }
 
 resource "azurerm_network_interface_security_group_association" "main" {
-  count                     = var.nodecount
+  count                     = var.worker_count+1
   network_interface_id      = azurerm_network_interface.main[count.index].id
   network_security_group_id = azurerm_network_security_group.main.id
 }
@@ -89,7 +89,7 @@ resource "tls_private_key" "main" {
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
-    count                 = var.nodecount
+    count                 = var.worker_count+1
     name                  = "${var.prefix}-node-${count.index}"
     location              = azurerm_resource_group.main.location
     resource_group_name   = azurerm_resource_group.main.name

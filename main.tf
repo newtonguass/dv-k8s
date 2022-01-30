@@ -83,58 +83,39 @@ resource "azurerm_network_interface_security_group_association" "main" {
   network_security_group_id = azurerm_network_security_group.main.id
 }
 
-resource "azurerm_virtual_machine" "main" {
-  count                 = var.nodecount
-  name                  = "${var.prefix}-node-${count.index}"
-  location              = azurerm_resource_group.main.location
-  resource_group_name   = azurerm_resource_group.main.name
-  network_interface_ids = [azurerm_network_interface.main[count.index].id]
-  vm_size               = "Standard_DS1_v2"
+resource "tls_private_key" "main" {
+  algorithm = "RSA"
+  rsa_bits = 4096
+}
 
-  # Uncomment this line to delete the OS disk automatically when deleting the VM
-  # delete_os_disk_on_termination = true
+resource "azurerm_linux_virtual_machine" "main" {
+    count                 = var.nodecount
+    name                  = "${var.prefix}-node-${count.index}"
+    location              = azurerm_resource_group.main.location
+    resource_group_name   = azurerm_resource_group.main.name
+    network_interface_ids = [azurerm_network_interface.main[count.index].id]
+    size                  = "Standard_DS1_v2"
 
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  # delete_data_disks_on_termination = true
+    os_disk {
+        name                 = "${var.prefix}-disk-${count.index}"
+        caching              = "ReadWrite"
+        storage_account_type = "Standard_LRS"
+    }
 
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-focal"
-    sku       = "20_04-lts-gen2"
-    version   = "latest"
-  }
-  storage_os_disk {
-    name              = "${var.prefix}-disk-${count.index}"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  os_profile {
-    computer_name  = "${var.prefix}-disk-${count.index}"
+
+    source_image_reference {
+      publisher = "Canonical"
+      offer     = "0001-com-ubuntu-server-focal"
+      sku       = "20_04-lts-gen2"
+      version   = "latest"
+    }
+
+    computer_name  = "${var.prefix}-node-${count.index}"
     admin_username = var.username
-    admin_password = var.password
-  }
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-  tags = {
-    environment = "staging"
-  }
-}
+    disable_password_authentication = true
 
-output "public_ip_address" {
-  description = "the public ip of nodes"
-  value       = "${azurerm_public_ip.main.*.ip_address}"
-}
-
-output "node_username" {
-  description = "the node username you input"
-  value       = var.username
-  sensitive = true
-}
-
-output "node_password" {
-  description = "the node password you input"
-  value       = var.password
-  sensitive = true
+    admin_ssh_key {
+        username       = var.username
+        public_key     = tls_private_key.main.public_key_openssh
+    }
 }

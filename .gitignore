@@ -1,8 +1,14 @@
 # Local .terraform directories
 **/.terraform/*
 
+#ignore the plna output
+.tfoutput
+.terraform*
+
 # .tfstate files
 *.tfstate
+
+# ignore the lock file
 *.tfstate.*
 
 # Crash log files
@@ -33,3 +39,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# ansible
+*.retry

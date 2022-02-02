@@ -19,3 +19,23 @@ variable "prefix" {
 data "external" "getIP" {
   program = ["bash", "getIP.sh"]
 }
+
+variable "image" {
+  type = object({
+      publisher = string
+      offer     = string
+      sku       = string
+      version   = string
+  })
+  default = {
+      publisher = "Canonical"
+      offer     = "0001-com-ubuntu-server-focal"
+      sku       = "20_04-lts-gen2"
+      version   = "latest"
+    }
+  
+}
+
+variable "vm_size" {
+  default = "Standard_D2S_v3"
+}

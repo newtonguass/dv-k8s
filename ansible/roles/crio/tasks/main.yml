@@ -1,0 +1,40 @@
+---
+#- name: Update OS to latest
+#  package:
+#    name: '*'
+#    state: latest
+#
+#- name: Enable kernel modules
+#  modprobe:
+#    name: "{{ item }}"
+#    state: present
+#  loop: "{{ kernelModules }}"
+
+
+# Add an Apt signing key, uses whichever key is at the URL
+- name: Add the apt key
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  loop: "{{ apt_keys }}"
+
+- name: Add specified repository into sources list using specified filename
+  ansible.builtin.apt_repository:
+    repo: "{{ item.source }}"
+    state: present
+    filename: "{{ item.file_name }}"
+  loop: "{{ apt_urls }}"
+
+- name: install crio
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop:
+    - cri-o
+    - cri-o-runc
+
+- name: Start and enable CRI-O
+  systemd:
+    name: crio
+    state: started
+    enabled: true

@@ -1,0 +1,12 @@
+---
+kernelModules:
+  - overlay
+  - br_netfilter
+
+apt_keys:
+  - "https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:1.22/xUbuntu_20.04/Release.key"
+  - "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key"
+
+apt_urls:
+  - { source: "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /", file_name: "devel:kubic:libcontainers:stable.list" }
+  - { source: "deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.22/xUbuntu_20.04/ /", file_name: "devel:kubic:libcontainers:stable:cri-o:1.22.list" }

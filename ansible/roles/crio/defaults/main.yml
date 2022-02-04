@@ -3,6 +3,11 @@ kernelModules:
   - overlay
   - br_netfilter
 
+sysctl:
+  - net.bridge.bridge-nf-call-iptables
+  - net.ipv4.ip_forward
+  - net.bridge.bridge-nf-call-ip6tables
+
 apt_keys:
   - "https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:1.22/xUbuntu_20.04/Release.key"
   - "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key"

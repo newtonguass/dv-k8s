@@ -5,6 +5,9 @@
 .tfoutput
 .terraform*
 
+#ignore the credential file
+.credential/
+
 # .tfstate files
 *.tfstate
 

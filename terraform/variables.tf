@@ -1,15 +1,9 @@
 variable "worker_count" {
-  description = "enter the how many worker node you want"
-  type = number
-  validation {
-    condition     = can(regex("^[0-9]+$", var.worker_count))
-    error_message = "Only integer value is allowed."
-  }
+  default = 1
 }
 
 variable "username" {
-  description = "administrator username"
-  type        = string
+  default  = "k8s"
 }
 
 variable "prefix" {
@@ -37,5 +31,5 @@ variable "image" {
 }
 
 variable "vm_size" {
-  default = "Standard_D2S_v3"
+  default = "Standard_B2s"
 }

@@ -1,0 +1,18 @@
+---
+kernelModules:
+  - br_netfilter
+
+sysctl:
+  - net.bridge.bridge-nf-call-iptables
+  - net.bridge.bridge-nf-call-ip6tables
+
+required_apt:
+  - apt-transport-https 
+  - ca-certificates 
+  - curl
+
+apt_keys:
+  - https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+apt_urls:
+  - { source: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main", file_name: "kubernetes.list" }

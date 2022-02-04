@@ -1,4 +1,8 @@
 ---
+# the container-run time var is pass through start.sh
+- include_role:
+    name: "{{ runtime }}"
+
 - name: Update OS to latest
   package:
     name: '*'
@@ -20,31 +24,36 @@
     reload: yes
   loop: "{{ sysctl }}"
 
+- name: install required apt
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop: "{{ required_apt }}"
 
-# Add an Apt signing key, uses whichever key is at the URL
 - name: Add the apt key
-  apt_key:
-    url: "{{ item }}"
-    state: present
-  loop: "{{ apt_keys }}"
+  shell: curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
-- name: Add specified repository into sources list using specified filename
+- name: Add specified k8s repository
   ansible.builtin.apt_repository:
     repo: "{{ item.source }}"
     state: present
     filename: "{{ item.file_name }}"
   loop: "{{ apt_urls }}"
 
-- name: install crio
+- name: install k8s
   apt:
     name: "{{ item }}"
     update_cache: yes
   loop:
-    - cri-o
-    - cri-o-runc
+    - kubelet
+    - kubeadm
+    - kubectl
 
-- name: Start and enable CRI-O
-  systemd:
-    name: crio
-    state: started
-    enabled: true
+- name: Hold kubeadm
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl

@@ -16,3 +16,20 @@
   hosts: k8sMaster
   roles:
     - { role: kube-master, become: True }
+
+- name: query the join token
+  hosts: k8sMaster
+  tasks:
+    - name:  query the join token
+      shell: kubeadm token create --print-join-command
+      register: join_with_token
+      environment:
+            KUBECONFIG: /etc/kubernetes/admin.conf
+      become: True
+
+- name: node joining
+  hosts: k8sWorker
+  tasks:
+    - name:  using join token to join the cluster
+      shell: "{{ hostvars['k8sMaster']['join_with_token']['stdout'] }}"
+      become: True

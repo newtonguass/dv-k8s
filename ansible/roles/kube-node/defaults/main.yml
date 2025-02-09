@@ -15,4 +15,4 @@ apt_keys:
   - https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
 apt_urls:
-  - { source: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main", file_name: "kubernetes.list" }
+  - { source: "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main", file_name: "kubernetes.list" }

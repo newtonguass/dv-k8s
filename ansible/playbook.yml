@@ -2,9 +2,9 @@
 - name: "wait the vm being available"
   hosts: all
   tasks:
-    - name: Wait 300 seconds, but only start checking after 60 seconds
+    - name: Wait 300 seconds, but only start checking after 3 seconds
       wait_for_connection:
-        delay: 15
+        delay: 3
         timeout: 300
 
 - name: "install kubeadm kubelet kube"
@@ -32,4 +32,11 @@
   tasks:
     - name:  using join token to join the cluster
       shell: "{{ hostvars['k8sMaster']['join_with_token']['stdout'] }}"
+      become: True
+
+- name: add kubeconfig
+  hosts: k8sMaster
+  tasks:
+    - name:  add kubeconfig
+      shell: echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /root/.bashrc
       become: True

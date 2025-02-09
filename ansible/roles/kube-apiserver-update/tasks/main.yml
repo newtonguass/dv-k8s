@@ -1,0 +1,34 @@
+---
+- block:
+    - name: show the remote template
+      template:
+        src: kube-apiserver-updated.yaml.j2
+        dest: /tmp/kube-apiserver-updated.yaml
+
+    - name: back up the kube api-server yaml
+      command: cp /etc/kubernetes/manifests kube-apiserver.yaml /tmp/kube-apiserver.yaml
+      register: test
+
+    - name: print
+      debug:
+          msg: "{{ test.stdout }}"
+  
+        #  - name: update the kube api-server yaml to manifest
+        #    command: cp /tmp/kube-apiserver-updated.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
+        #    register: update_attempt
+        #
+        #  - name: check the api-server health
+        #    command: curl -k https://localhost:6443/livez?verbose
+        #    register: check_api_health
+        #    until: check_api_health.stdout.find("check passed") != -1
+        #    retries: 2
+        #    delay: 10
+        #
+        #rescue:
+        #  - name: recover the api-server
+        #    command: cp /tmp/kube-apiserver.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
+        #    when: update_attempt is succeeded
+        #
+        #  - name: api-server update error
+        #    ansible.builtin.fail:
+        #      msg: api-server update error and try to recover

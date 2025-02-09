@@ -1,2 +1,4 @@
 ---
 # vars file for master
+KUBERNETES_VERSION: v1.32
+CRIO_VERSION: v1.32

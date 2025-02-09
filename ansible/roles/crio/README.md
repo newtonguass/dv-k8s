@@ -1,38 +1,51 @@
-Role Name
-=========
+# Ansible Role for CRI-O
 
-A brief description of the role goes here.
+<a href="https://alvistack.com" title="AlviStack" target="_blank"><img src="/alvistack.svg" height="75" alt="AlviStack"></a>
 
-Requirements
-------------
+[![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/alvistack/ansible-role-cri_o/master)](https://gitlab.com/alvistack/ansible-role-cri_o/-/pipelines)
+[![GitHub tag](https://img.shields.io/github/tag/alvistack/ansible-role-cri_o.svg)](https://github.com/alvistack/ansible-role-cri_o/tags)
+[![GitHub license](https://img.shields.io/github/license/alvistack/ansible-role-cri_o.svg)](https://github.com/alvistack/ansible-role-cri_o/blob/master/LICENSE)
+[![Ansible Role](https://img.shields.io/badge/galaxy-alvistack.cri_o-blue.svg)](https://galaxy.ansible.com/alvistack/cri_o)
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Ansible Role for CRI-O Installation.
 
-Role Variables
---------------
+## Requirements
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+This role require Ansible community package 4.10 or higher.
 
-Dependencies
-------------
+This role was designed for:
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- Ubuntu 20.04, 22.04, 24.04, 24.10
+- AlmaLinux 8, 9
+- openSUSE Leap 15.6, Tumbleweed
+- Debian 12, Testing
+- Fedora 40, 41, Rawhide
+- CentOS 7, 8 Stream, 9 Stream
+- RHEL 7, 8, 9
 
-Example Playbook
-----------------
+## Role Variables
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+[defaults/main.yml](defaults/main.yml)
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Dependencies
 
-License
--------
+[ansible-galaxy-requirements.yml](ansible-galaxy-requirements.yml)
 
-BSD
+## Example Playbook
 
-Author Information
-------------------
+[molecule/default/converge.yml](molecule/default/converge.yml)
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role could simply deploy to `localhost` as below:
+
+    molecule converge -s default
+
+## License
+
+- Code released under [Apache License 2.0](LICENSE)
+- Docs released under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
+
+## Author Information
+
+- Wong Hoi Sing Edison
+  - <https://twitter.com/hswong3i>
+  - <https://github.com/hswong3i>
